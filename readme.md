@@ -7,6 +7,6 @@ This was the time little 14 year old me _really_ wanted to get into
 writing video games. And apparently this worked out quite well! (flex)
 
 ![./backups/screenshot_multiplayer.png](./backups/screenshot_multiplayer.png)
-![./backups/screenshot_singleplayer.png](./backups/screenshot_singleplayer)
+![./backups/screenshot_singleplayer.png](./backups/screenshot_singleplayer.png)
 
 ![./backups/creation.png](./backups/creation.png)
