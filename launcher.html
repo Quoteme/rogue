@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Launcher</title>
+		<link rel="shortcut icon" type="image/png" href="icon.png"/>
+		<style type="text/css">
+			body{
+				background-color: #161616;
+				color: #fff;
+				font-family: Courier New;
+				margin: 0px;
+			}
+			#header{
+				background-color: #4472B9;
+				font-size: 32px;
+				padding: 10px;
+				text-align: center;
+			}
+			#gen_button{
+				margin: auto;
+				display: block;
+			}
+			#notation{
+				font-size: 10px;
+			}
+		</style>
+		<script>
+
+			function generate(){
+				scale = document.getElementById("scale").value;
+				players = document.getElementById("players").value;
+				p1c = document.getElementById("p1c").value;
+				p2c = document.getElementById("p2c").value;
+				p1sk = document.getElementById("p1sk").value;
+				p2sk = document.getElementById("p2sk").value;
+				ground = document.getElementById("ground").value;
+				blocks = document.getElementById("blocks").value;
+				filter = document.getElementById("filter").value;
+				map_size_x = document.getElementById("map_size_x").value;
+				map_size_y = document.getElementById("map_size_y").value;
+				map = document.getElementById("map").value;
+				particles = document.getElementById("particles").value;
+				health = document.getElementById("health").value;
+				weapon = document.getElementById("weapon").value;
+				link = 'index.html' + '?scale=' + scale + '&players=' + players + '&p1c=' + p1c + '&p1sk=' + p1sk + '&p2sk=' + p2sk + '&p2c=' + p2c + '&health=' + health + '&weapon=' + weapon + '&ground=' + ground + '&blocks=' + blocks + '&filter=' + filter + '&map_size_y=' + map_size_y + '&map_size_x=' + map_size_x + '&map=' + map + '&particles=' + particles;
+				location.href = link;
+			}
+
+	</script>
+	</head>
+	<body>
+		<div id='header'>R-Launcher | Rogue 1.0</div>
+
+		<table>
+			<tr>
+				<td>Scale: </td>
+				<td><input id="scale" type="number" value='250'></td>
+				<td>Setting scale lower = bigger
+					pixels and<br>setting scale higher = smaller pixels
+				</td>
+			</tr>
+			<tr>
+				<td>Players: </td>
+				<td>
+					<select id="players">
+						<option value='1'>1</option>
+						<option value='2'>2</option>
+					</select>
+				</td>
+				<td>Player one controles = WASD;<br>
+					Player two conroles = up,down,left,right</td>
+			</tr>
+			<tr>
+				<td> Player one color: </td>
+				<td>
+					<select id='p1c'>
+						<option value='green'>green</option>
+						<option value='red'>red</option>
+						<option value='blue'>blue</option>
+						<option value='yellow'>yellow</option>
+						<option value='hobo'>hobo</option>
+					</select>
+				</td>
+				<td>
+					color of player one
+				</td>
+			</tr>
+			<tr>
+				<td> Player one shoot-key: </td>
+				<td>
+					<select id='p1sk'>
+						<option value='space'>space</option>
+						<option value='Y'>Y</option>
+						<option value='Z'>Z</option>
+						<option value='C'>C</option>
+						<option value='X'>X</option>
+					</select>
+				</td>
+				<td>
+					The key to trigger a shoot
+				</td>
+			</tr>
+			<tr>
+				<td> Player two color: </td>
+				<td>
+					<select id='p2c'>
+						<option value='red'>red</option>
+						<option value='green'>green</option>
+						<option value='blue'>blue</option>
+						<option value='yellow'>yellow</option>
+						<option value='hobo'>hobo</option>
+					</select>
+				</td>
+				<td>
+					color of player two
+				</td>
+			</tr>
+			<tr>
+				<td> Player two shoot-key: </td>
+				<td>
+					<select id='p2sk'>
+						<option value='l'>L</option>
+						<option value='r_ctrl'>right ctrl</option>
+						<option value='space'>space</option>
+					</select>
+				</td>
+				<td>
+					The key to trigger a shoot
+				</td>
+			</tr>
+			<tr>
+				<td> Player health: </td>
+				<td>
+					<input id="health" type="number" value='4'>
+				</td>
+				<td>
+					Number of lifes each Player has.
+				</td>
+			</tr>
+			<tr>
+				<td> Weapon: </td>
+				<td>
+					<select id='weapon'>
+						<option value='2'>Bullet</option>
+						<option value='1'>Fist</option>
+						<option value='0'>Shotgun</option>
+					</select>
+				</td>
+				<td>
+					The weapon used in combat
+				</td>
+			</tr>
+			<tr>
+				<td>Blocks: </td>
+				<td><input id="blocks" type="number" value='0.1'></td>
+				<td>Chance of spawning a block</td>
+			</tr>
+			<tr>
+				<td>Walls: </td>
+				<td><input id="ground" type="number" value='0.4'></td>
+				<td>Chance of other blocks spawning next to a block.
+					This will lead to walls and big chunks of blocks</td>
+			</tr>
+			<tr>
+				<td>Y size of map: </td>
+				<td><input id="map_size_y" type="number" value='30'></td>
+				<td>Number of blocks the map is high.</td>
+			</tr>
+			<tr>
+				<td>X size of map: </td>
+				<td><input id="map_size_x" type="number" value='40'></td>
+				<td>Number of blocks the map is wide.</td>
+			</tr>
+			<tr>
+				<td>Filter: </td>
+				<td><select id="filter">
+						<option value='none'>none</option>
+						<option value='acid'>acid trip</option>
+				</td>
+				<td>Choose between different filters</td>
+			</tr>
+			<tr>
+				<td>Particles: </td>
+				<td><select id="particles">
+					<option value='false'>No</option>
+					<option value='true'>Yes</option>
+				</td>
+				<td>Might slow down a little</td>
+			</tr>
+			<tr>
+				<td>Map type: </td>
+				<td><select id="map">
+					<option value='desert'>desert</option>
+					<option value='lab'>laboratory</option>
+					<option value='tron'>tron</option>
+					<option value='dream'>dream</option>
+				</td>
+				<td>Choose between different map types</td>
+			</tr>
+		</table>
+		<br>
+		<input type="button" id='gen_button' value="Enter the game" onClick="generate()">
+		<br>
+		Note: If someting does not work in your world, just reload.
+		Your configuration is save.
+		<br>
+		<br>
+		<div id='notation'>
+		© 2015 Luca-Leon Happel
+		</div>
+	</body>
+</html>

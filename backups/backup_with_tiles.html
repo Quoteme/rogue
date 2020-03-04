@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Jump n runner - First Phaser Test</title>
+	<link rel="shortcut icon" type="image/png" href="icon.png"/>
+	<!--
+	<script type="text/javascript" src="http://code.createjs.com/easeljs-0.8.0.min.js"></script>
+	<script src="http://code.createjs.com/tweenjs-0.6.0.min.js"></script>
+	-->
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+			background-color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+canvas_x = 400;
+canvas_y = 300;
+
+var game = new Phaser.Game(canvas_x, canvas_y, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+function preload() {
+	game.load.image('ground', 'assets/ground.png');
+	game.load.spritesheet('dude', 'assets/main.png', 11, 14);//23 tiles
+	game.load.spritesheet('sky', 'assets/green_bot_sprite.png', 13, 13);
+}
+
+function create() {
+	scale_x = 2;
+	scale_y = 2;
+	tile_size = 14 * scale_x;
+
+	player 	= new Array();
+	map 	= new Array();
+
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+	game.stage.backgroundColor = '#80d0a0';
+
+	create_level(15, 8, 1)
+
+	function create_level(size_x, size_y, number){
+		// 0 = ground
+		// 1 = next row
+		// 2 = nothing
+		// 3 = player
+
+		// vars to build map
+			row = 0;
+
+		// generate map
+			for (var i = 0; i <= size_x * size_y; i++) {
+				if (i < size_x && row == 0){
+					map[i] = 0;
+				}else if (map[i-1] == 1){
+					map[i] = 0;
+				}else if (row == size_y-1){
+					map[i] = 0;
+				}
+
+				if (i == size_x * (row + 1)){
+					map[i] = 1;
+					row += 1;
+				}
+			}
+		//end of map generating
+
+		platforms 			 = game.add.group();
+		platforms.enableBody = true;[number]
+
+		// vars for building map
+			next_row = 0;
+			go_right = 0;
+
+		// build the map
+			for (var i = 0; i < map.length; i++) {
+				if (map[i] == 0){		// create the walls
+					border = platforms.create(go_right * tile_size, next_row * tile_size, 'ground'); //	wall to climbe on
+					border.body.immovable = true;
+					border.scale.setTo(scale_x, scale_y);
+				}
+
+				go_right += 1;
+
+				if (map[i] == 1){	// create a new row
+					next_row += 1;
+					go_right = 0;
+				}
+
+			}
+		// time to create the players, shall we?
+			how_many_players = 0;
+			create_player(tile_size * 2, tile_size * 2, 0);
+	}
+
+	function create_player(x, y, number){
+
+		player[number] = game.add.sprite(x, y, 'dude');
+		player[number].scale.setTo(scale_x,scale_y);
+		player[number].stage.smoothed = false;
+
+		game.physics.arcade.enable(player[number]);
+		player[number].body.bounce.y = 0;
+		player[number].body.gravity.y = 500;
+		player[number].body.collideWorldBounds = false;
+
+		player[number].animations.add('stand_right', [0, 1, 2], 6, true);
+		player[number].animations.add('stand_left', [4, 5, 6], 6, true);
+		player[number].animations.add('blink_right', [3], 6, true);
+		player[number].animations.add('blink_left', [7], 6, true);
+		player[number].animations.add('right', [8, 9, 10], 8, true);
+		player[number].animations.add('left', [11, 12, 13], 8, true);
+		player[number].animations.play('stand_right');
+
+		how_many_players += 1;
+	}
+}
+
+function update() {
+	for (var i = 0; i < how_many_players; i++) {
+		game.physics.arcade.collide(player[i], platforms)
+	}
+}
+</script>
+
+</body>
+</html>

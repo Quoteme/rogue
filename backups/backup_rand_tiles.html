@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Jump n runner - First Phaser Test</title>
+	<link rel="shortcut icon" type="image/png" href="icon.png"/>
+	<!--
+	<script type="text/javascript" src="http://code.createjs.com/easeljs-0.8.0.min.js"></script>
+	<script src="http://code.createjs.com/tweenjs-0.6.0.min.js"></script>
+	-->
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+			background-color: #000;
+        }
+		canvas{
+			margin: auto;
+		}
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+canvas_x = 400;
+canvas_y = 300;
+
+var game = new Phaser.Game(canvas_x, canvas_y, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+function preload() {
+	game.load.image('ground', 'assets/ground.png');
+	game.load.spritesheet('dude', 'assets/main.png', 11, 14);//23 tiles
+	game.load.spritesheet('sky', 'assets/green_bot_sprite.png', 13, 13);
+}
+
+function create() {
+	scale_x = 2;
+	scale_y = 2;
+	tile_size = 14 * scale_x;
+	how_many_players = 0;
+
+	player 	= new Array();
+	map 	= new Array();
+
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+	game.stage.backgroundColor = '#dad45e';
+
+	create_level(20, 15, 1)
+
+	function create_level(size_x, size_y, number){
+		game.world.setBounds(0, 0, size_x * tile_size + game.world.width - tile_size * 15.3, size_y * tile_size + game.world.height - tile_size * 10.7);
+		// 0 = ground
+		// 1 = next row
+		// 2 = nothing
+		// 3 = player
+
+		// vars to build map
+			row = 0;
+
+		// generate map
+			for (var i = 0; i < size_x * size_y; i++) {
+			// create borders
+				if (i < size_x && row == 0){
+					map[i] = 0;
+				}else if (map[i-1] == 1){
+					map[i] = 0;
+				}else if (i == size_x * (row + 1) && row != 0){
+					map[i - 1] = 0;
+					map[i - 2] = 0;
+				}
+				if (row == size_y - 1){
+					map[i] = 0;
+					map[i - size_x] = 0;
+				}
+				if (i == size_x * (row + 1)){
+					map[i] = 1;
+					row += 1;
+				}
+			// end of generating borders
+
+			// random platforms
+				if (map[i-1] == 0 || map[i-size_x] == 0 || map[i-size_x + 1] || map[i-size_x - 1]){
+					if (Math.random() > 0.6 )
+						if (map[i] != 1)
+							map[i] = 0;
+				}else{
+					if (Math.random() > 0.9 )
+						if (map[i] != 1)
+							map[i] = 0;
+				}
+
+
+			// better create the player
+				if (i == 2 + size_x * 2)
+					create_player(i * tile_size - row * size_x * tile_size, row * tile_size, 0);
+			}
+		// end of map generating
+
+		platforms 			 = game.add.group();
+		platforms.enableBody = true;
+
+		// vars for building map
+			next_row = 0;
+			go_right = 0;
+
+		// build the map
+			for (var i = 0; i < map.length; i++) {
+				if (map[i] == 0){		// create the walls
+					border = platforms.create(go_right * tile_size, next_row * tile_size, 'ground'); //	wall to climbe on
+					border.body.immovable = true;
+					border.scale.setTo(scale_x, scale_y);
+				}
+
+				go_right += 1;
+
+				if (map[i] == 1){	// create a new row
+					next_row += 1;
+					go_right = 0;
+				}
+
+			}
+
+	}
+
+	function create_player(x, y, number){
+
+		player[number] = game.add.sprite(x, y, 'dude');
+		player[number].scale.setTo(scale_x,scale_y);
+		player[number].stage.smoothed = false;
+
+		game.physics.arcade.enable(player[number]);
+		player[number].body.collideWorldBounds = false;
+
+		player[number].animations.add('stand_right', [0, 1, 2], 6, true);
+		player[number].animations.add('stand_left', [4, 5, 6], 6, true);
+		player[number].animations.add('blink_right', [3], 6, true);
+		player[number].animations.add('blink_left', [7], 6, true);
+		player[number].animations.add('right', [8, 9, 10], 8, true);
+		player[number].animations.add('left', [11, 12, 13], 8, true);
+		player[number].animations.play('stand_right');
+
+		how_many_players += 1;
+		game.camera.follow(player[number]);
+	}
+
+	// set the keyboard as an input
+		cursors = game.input.keyboard.createCursorKeys();
+
+	// player animation handlers
+		player_stand_left = false;
+}
+
+function update() {
+	// player collision detecter
+		for (var i = 0; i < how_many_players; i++) {
+			game.physics.arcade.collide(player[i], platforms)
+		}
+
+	controle_player(0);
+
+	// player controling stuff using keyboard
+		function controle_player(number){
+			if (cursors.down.isDown)
+				player[number].body.velocity.y = 150;
+			else if (cursors.up.isDown)
+				player[number].body.velocity.y = -150;
+			else {
+				player[number].body.velocity.y = 0;
+			}
+
+			if (cursors.left.isDown)
+			{
+				player[number].body.velocity.x = -150;
+				player[number].animations.play('left');
+				player_stand_left = true;
+			} else if (cursors.right.isDown)
+			{
+				player[number].body.velocity.x = 150;
+				player[number].animations.play('right');
+				player_stand_left = false;
+			} else {
+				player[number].body.velocity.x = 0;
+			}
+
+
+			if (cursors.right.isDown == false &&
+				cursors.left.isDown == false &&
+				cursors.up.isDown == false &&
+				cursors.down.isDown == false){
+					if (player_stand_left)
+						player[number].animations.play('stand_left');
+					else
+						player[number].animations.play('stand_right');
+				}
+		}
+}
+</script>
+
+</body>
+</html>

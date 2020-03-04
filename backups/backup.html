@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Jump n runner - First Phaser Test</title>
+	<link rel="shortcut icon" type="image/png" href="icon.png"/>
+	<!--
+	<script type="text/javascript" src="http://code.createjs.com/easeljs-0.8.0.min.js"></script>
+	<script src="http://code.createjs.com/tweenjs-0.6.0.min.js"></script>
+	-->
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+			background-color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+canvas_x = window.innerWidth;
+canvas_y = window.innerHeight;
+
+var game = new Phaser.Game(canvas_x, canvas_y, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+
+function preload() {
+	game.load.spritesheet('dude', 'assets/main.png', 11, 14);//23 tiles
+	game.load.spritesheet('sky', 'assets/green_bot_sprite.png', 13, 13);
+}
+
+function create() {
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+	game.stage.backgroundColor = '#80d0a0'
+
+	player = game.add.sprite(10, 10, 'dude');
+	player.scale.setTo(2,2);
+	player.stage.smoothed = false;
+
+	game.physics.arcade.enable(player);
+	player.body.bounce.y = 0.2;
+	player.body.gravity.y = 300;
+	player.body.collideWorldBounds = true;
+
+	player.animations.add('stand', [0, 1, 2], 6, true);
+	player.animations.add('right', [4, 5, 6], 8, true);
+	player.animations.add('left', [7, 8, 9], 8, true);
+	player.animations.play('right');
+}
+
+function update() {
+
+}
+
+// get variables from reload
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>
+
+</body>
+</html>
