@@ -1,6 +1,6 @@
 # Rogue
 
-### [TRY IT OUT!](./launcher.html)
+### [TRY IT OUT!](http://quoteme.github.com/rogue/launcher.html)
 
 This little passion project of mine was written back in early 2015;
 This was the time little 14 year old me _really_ wanted to get into
